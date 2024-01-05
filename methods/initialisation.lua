@@ -1,8 +1,10 @@
-require "methods.constants"
+require "methods.trainFunctions"
+require "methods.trainStationFunctions"
+require "methods.guisBuilder"
 require "methods.globalEvents"
-
-function InitGlobalData(init)
-	if init then
-		global.Index=1
-	end
-end
+require "methods.remoteBuilder"
+listTrains={}
+listTrainsStop={}
+global.listTrainsAtStop=global.listTrainsAtStop or {}
+table.insert(ListPrototypesData,{prototype=TrainPrototype,globalData="listTrains",localData=listTrains})
+table.insert(ListPrototypesData,{prototype=TrainStopPrototype,globalData="listTrainsStop",localData=listTrainsStop})
