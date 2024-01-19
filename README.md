@@ -2,6 +2,7 @@
 # How does it work
 No technology required.
 When selecting a train, a gui will appear on the left top side. Multiple signals can be added. Those are automatically transfered to the station where the train stops. Signals modified while the train is waiting at the station are immediatly propagated
+
 # Remote configuration
 Following remote commands are available:
 - set_signals(trainid,signals): set the signals {signal={name,type},count} for the train with this id
