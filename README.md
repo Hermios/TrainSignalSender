@@ -1,7 +1,7 @@
 # *_Please send any request to Github (See Source URL!)_*
 # How does it work
 No technology required.
-When selecting a train, a gui will appear on the left top side. Multiple signals can be added. Those are automatically transfered to the station where the train stops. Signals modified while the train is waiting at the station are immediatly propagated
+When opening the gui for any train, this display an extra one on the left top side. Multiple signals can be added. Those are automatically transfered to the station where the train stops. Signals modified while the train is waiting at the station are immediatly propagated
 
 # Remote configuration
 Following remote commands are available:
