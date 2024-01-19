@@ -1,0 +1,1 @@
+createdata("item","constant-combinator",trainstop_combinator,nil,true)

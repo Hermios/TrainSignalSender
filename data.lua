@@ -1,3 +1,5 @@
-require "methods.constants"
-require "prototypes.trainreader"
+require "__HermiosLibs__.data-libs"
+require "constants"
+require "prototypes.items"
+require "prototypes.entities"
 require "prototypes.tech"
