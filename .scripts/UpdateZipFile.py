@@ -1,4 +1,4 @@
-import os
+import os,re
 import json
 from github import Github
 from glob import glob
@@ -31,33 +31,37 @@ os.remove(f"./{zip_file_name}/README.md")
 
 ################################# Set info.json ###############################
 factorio_version=os.environ['FACTORIO_RELEASE'][:os.environ['FACTORIO_RELEASE'].rfind('.')]
-mod_dependancies=[f"base>={os.environ['FACTORIO_RELEASE']}"]
+mod_dependancies=[f"base>{os.environ['FACTORIO_RELEASE']}"]
 try:
-    for dependancy in repo.get_variable("MOD_DEPENDANCIES").value.split('\r\n'):
-        if dependancy.startswith("!"):
-            mod_dependancies.append(dependancy)
-        else:    
-            mod=re.search("(\w+)",dependancy).group(1)
-            with requests.get(f"https://mods.factorio.com/api/mods/{mod}") as response:
-                last_version=None
-                for release in response.json()["releases"]:
-                    if release["info_json"]["factorio_version"]==factorio_version:
-                        last_version=release["version"]
-                if not last_version:
-                    if not dependancy.startswith("?"):
-                       print(f"mod unavailable for dependancy: {dependancy}")
-                       exit(1) 
-                else:
-                    mod_dependancies.append(f"{dependancy}>={last_version}")
+    list_dependancies=repo.get_variable("MOD_DEPENDANCIES").value
 except:
-    pass
+    list_dependancies=""
+for dependancy in list_dependancies.split('\r\n'):
+    dependancy=dependancy.strip()
+    if dependancy=="":
+        continue
+    elif dependancy.startswith("!"):
+        mod_dependancies.append(dependancy)
+    else:    
+        mod=re.search("(\w+)",dependancy).group(1)
+        with requests.get(f"https://mods.factorio.com/api/mods/{mod}") as response:
+            last_version=None
+            for release in response.json()["releases"]:
+                if release["info_json"]["factorio_version"]==factorio_version:
+                    last_version=release["version"]
+            if not last_version:
+                if not dependancy.startswith("?"):
+                    print(f"mod unavailable for dependancy: {dependancy}")
+                    exit(1) 
+            else:
+                mod_dependancies.append(f"{dependancy}>={last_version}")
 
 info_json={
   "name": repo.name,
   "version": os.environ['RELEASE_VERSION'],
   "title": repo.get_variable("MOD_TITLE").value,
   "author": repo.get_variable("MOD_AUTHOR").value,
-  "homepage": repo.url,
+  "homepage": repo.html_url,
   "dependencies": mod_dependancies,
   "description": repo.get_variable("MOD_DESCRIPTION").value,
   "factorio_version": factorio_version
@@ -100,7 +104,7 @@ data={
     "description": readme,
     "category":os.getenv("MOD_CATEGORY"),
     "license":os.getenv("MOD_LICENCE"),
-    "source_url":repo.url
+    "source_url":repo.html_url
 }
 
 #Does mod exits
@@ -115,6 +119,7 @@ if mod_exists and readme is not None:
         exit(1)
     
 #Update url for mod exists or not
+print("init upload")
 init_end_point=f"https://mods.factorio.com/api/v2/mods/{'releases/init_upload' if mod_exists else 'init_publish'}"
 
 response = requests.post(init_end_point, data={"mod":repo.name}, headers=request_headers)
@@ -124,11 +129,16 @@ if not response.ok:
     exit(1)
 
 upload_url = response.json()["upload_url"]
+if not mod_exists:
+    del data["mod"]
 
+print("publish/upload")
 with open(f"{zip_file_name}.zip", "rb") as f:
     request_body = {"file": f}
-    requests.post(upload_url, files=request_body, data=data)
+    response=requests.post(upload_url, files=request_body, data=data)
 
 if not response.ok:
     print(f"upload failed: {response.text}")
     exit(1)
+
+print(f"publication of mod {repo.name} successful:{response.url}")
