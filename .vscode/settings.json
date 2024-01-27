@@ -28,7 +28,8 @@
 		"__Profiler",
 		"createdata",
 		"custom_guis",
-		"custom_prototypes"
+		"custom_prototypes",
+		"list_events"
 	],
 	"Lua.workspace.ignoreDir": [
 			".vscode",

@@ -1,5 +1,5 @@
 custom_guis["train"]={
-	position="left",
+	position="screen",
 	gui=
 	{
 		type="frame", direction="vertical",
@@ -44,19 +44,11 @@ function update_index_caption(lua_gui_element)
 	lua_gui_element.caption=lua_gui_element.parent.tags.id
 end
 
-function update_count(gui_element)
-	data=gui_element.type=="slider" and
-		{
-			source_value="slider_value",
-			gui_element="textfield",
-			dest_value="text",
-			convert=tostring
-		} or
-		{
-			source_value="text",
-			gui_element="slider",
-			dest_value="slider_value",
-			convert=tonumber
-		}
-	gui_element.parent[data.gui_element][data.dest_value]=data.convert(gui_element[data.source_value])
+function update_count(lua_gui_element)
+	local frame=lua_gui_element.parent
+	if lua_gui_element.type=="slider" then
+        frame.textfield.text=tostring(lua_gui_element.slider_value)
+    elseif lua_gui_element.text~="" then
+        frame.slider.slider_value=tonumber(lua_gui_element.text)
+    end
 end
