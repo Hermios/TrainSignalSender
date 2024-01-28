@@ -17,3 +17,7 @@ end
 function trainstation:update_network()
 	self.sender.get_or_create_control_behavior().parameters=((global.custom_entities[(self.entity.get_stopped_train() or {}).id] or {}).control_behavior or {}).parameters
 end
+
+function trainstation:on_removed()
+	self.sender.destroy()
+end
