@@ -2,9 +2,6 @@ trainstation={}
 custom_prototypes["train-stop"]=trainstation
 
 function trainstation:new(entity)
-	if entity.valid==false then
-		return
-	end
 	local sender = entity.surface.create_entity({name=trainstop_combinator,position=entity.position,force=entity.force})
 		sender.operable = false
 		sender.minable = false
