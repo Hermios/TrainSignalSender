@@ -2,9 +2,6 @@ trainstation={}
 custom_prototypes["train-stop"]=trainstation
 
 function trainstation:new(entity)
-	if entity.valid==false then
-		return
-	end
 	local sender = entity.surface.create_entity({name=trainstop_combinator,position=entity.position,force=entity.force})
 		sender.operable = false
 		sender.minable = false
@@ -19,4 +16,8 @@ end
 
 function trainstation:update_network()
 	self.sender.get_or_create_control_behavior().parameters=((global.custom_entities[(self.entity.get_stopped_train() or {}).id] or {}).control_behavior or {}).parameters
+end
+
+function trainstation:on_removed()
+	self.sender.destroy()
 end
