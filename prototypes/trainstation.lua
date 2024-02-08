@@ -1,6 +1,6 @@
-trainstation={}
+trainstation={only_name=true}
 custom_prototypes["train-stop"]=trainstation
-
+custom_prototypes["logistic-train-stop"]=trainstation
 function trainstation:new(entity)
 	local sender = entity.surface.create_entity({name=trainstop_combinator,position=entity.position,force=entity.force})
 		sender.operable = false
