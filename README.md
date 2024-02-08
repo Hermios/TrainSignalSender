@@ -9,3 +9,5 @@ Following remote commands are available:
 - clear_signals(trainid): remove all signals for the train with this id
 - get_signals(trainid): get all signals {signal={name,type},count} for the train with this id
 - has_signal(trainid,signal): return true if the train with this id has this signal={name,type}
+
+_This mod works with train stations and logitstic train stations from LTN Mod_
