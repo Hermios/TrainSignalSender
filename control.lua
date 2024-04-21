@@ -4,6 +4,13 @@ require "prototypes.train"
 require "prototypes.trainstation"
 require "methods.remote"
 require "guis.train"
+local is_init=true
+table.insert(list_events.on_tick,function()
+    if is_init then
+        game.get_player(1).gui.screen.clear()
+        is_init=false
+    end
+end)
 
 table.insert(list_events.on_train_changed_state,function(event)
     if global.custom_entities[event.train.id] then
